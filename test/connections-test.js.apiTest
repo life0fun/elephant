@@ -1,0 +1,27 @@
+var APIeasy = require('api-easy'),
+    asserthelper = require('./asserthelper'),
+    EventEmitter = require('events').EventEmitter,
+    vows = require('vows');
+
+var elephant = require('../src/app');
+
+
+// start the server first, the server will fork(), which cause the unit test run twice.
+//
+// for async test, topic : () -> unitfunc(args, this.callback)
+// vow of the topic get args from callback. 'vow topic result: function(err, res, body){ ... }'
+//
+
+var promise = new (EventEmitter);
+var app = elephant(promise);
+var suite = APIeasy.describe('testing elephant');
+
+suite.discuss('connections API')
+     .use('localhost', 8080)
+     .setHeader('Content-Type', 'application/json')
+     .get('/connections')
+     .expect(200)
+     .expect('should respond with 200', asserthelper.assertStatus(200))
+     .expect('should respond with application/json header', asserthelper.assertJsonHead())
+     .expect('should respond with valid json object', asserthelper.assertValidJson())
+     .export(module);

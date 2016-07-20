@@ -1,0 +1,26 @@
+# Client Ids
+
+Elephant stores client information into mysql database called spdyclient.
+
+For connected clients, client connection information is stored in 
+connected_push_id table.
+
+Revoked client ids are stored in revoked_cient_id table.
+Revoked push ids are stored in revoked_push_id table.
+
+## API
+
+Elephant provides API to access information in the mysql database.
+
+## get the connected client ids from the database for testing
+
+    $ELEPHANT_HOME/appserver/genclients.py | tee clients.txt
+
+## to revoke a client, send get request to the following url.
+    curl localhost:9080/api/revoke/{client_id}
+
+## to revoked a pushid associated with a client id,
+    curl localhost:9080/api/revoke/{push_id}/{client_id}
+
+## to increase revoke count for a client id
+    curl localhost:9080/api/revokecnt/{client_id}

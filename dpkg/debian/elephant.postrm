@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -e
+
+case "\$1" in
+    purge)
+        # clean up runtime files
+        rm -f /var/log/elephant/*
+        ;;
+esac

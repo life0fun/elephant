@@ -1,0 +1,38 @@
+# MySql server configuration
+
+## IP and port configuration.
+
+We store global clients information in mysql database.
+MySql server is running in elephant-dev.colorcloud.com at ip 69.25.109.230
+
+We need to open up port 3306 for mysql in iptable.
+    $IPTABLES -A $CHAIN -j ACCEPT -p tcp --dport 3306
+
+To verify reachability,
+    telnet elephant-dev.colorcloud.com 3306
+
+
+## my.conf
+
+disable skip-networking.
+set bind-address in to be your host ip rather than localhost.
+  bind-address=YOUR-SERVER-IP
+
+then restart mysql with 
+    service mysql stop start
+
+
+## Grant permissions.
+
+For application to connect to mysql server, we need to grant the permission.
+
+To grant access to a new database
+    mysql> GRANT ALL ON spdyclient.* TO root@'%' IDENTIFIED BY 'elephant';
+
+To grant access to existing database.
+
+    mysql> GRANT ALL ON spdyclient.* TO root@'%' IDENTIFIED BY 'elephant';
+or
+    mysql> GRANT ALL ON spdyclient.* TO nobody@'%' IDENTIFIED BY 'elephant';
+
+

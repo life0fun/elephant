@@ -1,0 +1,163 @@
+
+### 
+#  Jan 20 Mon test result, with 10 clients.
+###
+
+app_push_req_meter { type: 'meter',
+  count: 135551,
+  m1: 2.9644e-320,
+  m5: 4.035135189694382e-267,
+  m15: 3.400692821988776e-89,
+  mean: 0.5954369518909863,
+  unit: 'seconds' }
+
+
+
+2014-01-18 05:11:04.112 - debug: [spdyserver] client push ack 200 186582
+2014-01-18 05:11:04.112 - debug: [spdyserver] ack to pushack from client, 220 {"clientId":"w_xRgk8_uULr1OQP3vEsoxwpKyZVNkolnGKJuRUpEsJkvUTwgEwhprcbo18tRZElWeko0W6SAlRcsfClnYrQcQ==","pushTransId":"186582@13487","pushIndex":"186582","streamIds":"[ 26977 ]","result":"Push Delivered Successfully !!!"}
+2014-01-18 05:11:04.112 - info: [spdyserver] notify master push result: null w_xRgk8_uULr1OQP3vEsoxwpKyZVNkolnGKJuRUpEsJkvUTwgEwhprcbo18tRZElWeko0W6SAlRcsfClnYrQcQ==                               186582, 186582@13487 [ 26977 ], Push Delivered Successfully !!!
+
+
+2014-01-18 05:11:04.113 - info: [accounting] Push Delivered Successfully !!! clientId=w_xRgk8_uULr1OQP3vEsoxwpKyZVNkolnGKJuRUpEsJkvUTwgEwhprcbo18tRZElWeko0W6SAlRcsfClnYrQcQ==, pushId=null, pushIndex=186582, event=push-ack, success=true, code=200
+
+
+2014-01-18 05:11:05.119 - debug: [spdyserver] ack to pushack from client, 220 {"clientId":"C4wyp7DccNJknEeqRboBw4M2TdFr7vf7FijdAcZXeRs3qpBzhaznmOTVquDIbC20Jq_xlsCyvmmca6whmsGMJA==","pushTransId":"186583@13571","pushIndex":"186583","streamIds":"[ 27145 ]","result":"Push Delivered Successfully !!!"}
+
+
+2014-01-18 05:11:05.121 - info: [accounting] Push Delivered Successfully !!! clientId=C4wyp7DccNJknEeqRboBw4M2TdFr7vf7FijdAcZXeRs3qpBzhaznmOTVquDIbC20Jq_xlsCyvmmca6whmsGMJA==, pushId=null, pushIndex=186583, event=push-ack, success=true, code=200
+
+
+
+ps aux header
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+
+6111      5880  2.1  0.0 1015904 2256 pts/3    Sl+  Jan17  82:31 node /opt/haijin/local/bin/coffee src/app.coffee
+6111      5887  0.3 25.7 6699184 1965980 pts/3 Sl+  Jan17  13:59 node /opt/haijin/local/bin/coffee /opt/haijin/dev/elephant/elephant/src/app.coffee
+6111      5888  0.2  0.0 2225252  704 pts/3    Sl+  Jan17   9:30 node /opt/haijin/local/bin/coffee /opt/haijin/dev/elephant/elephant/src/app.coffee
+
+
+
+###
+# Jan 21 test result, with 20 clients.
+###
+
+app_push_req_meter { type: 'meter',
+  count: 16487,
+  m1: 2.9644e-320,
+  m5: 1.0059392811079665e-73,
+  m15: 1.386273628515764e-24,
+  mean: 0.3029761419749105,
+  unit: 'seconds' }
+
+
+
+
+###
+# need to run gc many times before it settle down
+###
+
+
+process -  18844  SIGTTIN, force a gc ! 
+[18844]  2698096 ms: Mark-sweep 34.3 (76.0) -> 32.9 (72.0) MB, 89 ms [gc extension] [GC in old space requested].
+process -  18844  SIGTTIN, force a gc ! 
+[18844]  2726048 ms: Mark-sweep 32.9 (72.0) -> 32.0 (71.0) MB, 68 ms [gc extension] [GC in old space requested].
+process -  18844  SIGTTIN, force a gc ! 
+[18844]  2749662 ms: Mark-sweep 32.1 (71.0) -> 31.1 (70.0) MB, 71 ms [gc extension] [GC in old space requested].
+process -  18844  SIGTTIN, force a gc ! 
+[18844]  2765884 ms: Mark-sweep 31.2 (70.0) -> 30.9 (70.0) MB, 65 ms [gc extension] [GC in old space requested].
+process -  18844  SIGTTIN, force a gc ! 
+[18844]  2784788 ms: Mark-sweep 30.9 (70.0) -> 30.7 (70.0) MB, 72 ms [gc extension] [GC in old space requested].
+process -  18844  SIGTTIN, force a gc ! 
+[18844]  2793496 ms: Mark-sweep 30.7 (70.0) -> 30.7 (70.0) MB, 74 ms [gc extension] [GC in old space requested].
+process -  18844  SIGTTIN, force a gc ! 
+[18844]  2800098 ms: Mark-sweep 30.7 (70.0) -> 30.7 (70.0) MB, 67 ms [gc extension] [GC in old space requested].
+
+
+
+
+######################################################
+# Jan 22 test result
+######################################################
+
+1. pushed about 162k requests to 10 spdyclients.
+
+app_push_req_meter { type: 'meter',
+  count: 162951,
+  m1: 4.4431074917928236e-30,
+  m5: 0.0000033389713952317345,
+  m15: 0.03193013458277724,
+  mean: 2.9041314228406514,
+  unit: 'seconds' }
+
+
+2. we see from heap dump about 80k streams lingering in the retain tree.
+
+    Stream 97890  770736 94 %
+
+    headers :: @1573285
+    type :: "SYN_STREAM" @30475
+    url :: "/client/v2/ack" @1551633
+    host :: "localhost.colorcloud.com:9443" @1551629
+
+    headers :: @1573359
+    type :: "SYN_STREAM" @30475
+    url :: "/client/v2/ack" @1551795
+    host :: "localhost.colorcloud.com:9443" @1551791
+
+
+
+3. after disconnect client, force a gc. now you see that mark-sweep object size reduced from 579 to 225.
+
+    process -  30121  SIGTTIN, force a gc ! 
+    [30121] 60052616 ms: Mark-sweep 579.5 (637.0) -> 225.5 (631.0) MB, 1928 ms [gc extension] [GC in old space requested].
+
+
+4. heap dump after disconnect all clients still showing there are some unclean streams.
+    Stream   48950   187949912
+
+
+######################################################
+# Jan 23 test result
+# with client spdylay_session_close_stream in on_data_send_callback.
+######################################################
+
+1. pushed about 186k requests to 10 spdyclients;
+
+app_push_req_meter { type: 'meter',
+  count: 186564,
+  m1: 3.6791188198232096e-33,
+  m5: 8.16764386143174e-7,
+  m15: 0.020045146026938975,
+  mean: 2.8304015628045147,
+  unit: 'seconds' }
+
+
+2. elephant used to have 1.9G rss, now rss stays at 500-600M after 186k pushes.
+
+    6111     13237  1.5  8.9 1608228 686460 pts/3  Sl+  Jan22  18:08 /ext/home/haijin.yan/.nvm/v0.10.20/bin/node --expose-gc --trace_gc /opt/haijin/dev/elephant/elephant/lib/app.js
+    6111     13239  1.0  6.8 1443116 522016 pts/3  Sl+  Jan22  11:35 /ext/home/haijin.yan/.nvm/v0.10.20/bin/node --expose-gc --trace_gc /opt/haijin/dev/elephant/elephant/lib/app.js
+
+3. From above, we confirm that the expensive data structures associated with a stream, like buffers, etc, has been released. 
+
+
+4. However, some collection inside node spdy still hold the ref to the stream object itself. We will need to look into the spdy lib and fix that.
+
+
+######################################################
+# Feb 3 test
+# with client random sleep before acking to test server timeout
+######################################################
+1. tested with 186k pushes.
+
+  app_push_req_meter { type: 'meter',
+    count: 186565,
+    m1: 2.9644e-320,
+    m5: 2.3334860193263073e-246,
+    m15: 2.862235229911859e-82,
+    mean: 0.8140954581720642,
+    unit: 'seconds' }
+
+2. there were 6 PushTimer object in the heap dump. Given we had pushed 18k requests, those 6 linger PushTimer objects might not be a leak.
+
+3. we will continue to perform more test and watch.
+

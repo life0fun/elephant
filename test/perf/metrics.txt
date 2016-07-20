@@ -1,0 +1,68 @@
+{"app_push_reqs":{"type":"counter","count":0},"client_push_acks":{"type":"counter","count":0},"push_not_connected_errs":{"type":"counter","count":0},"push_timed_out_errs":{"type":"counter","count":0},"push_id_errs":{"type":"counter","count":0},"client_register_reqs":{"type":"counter","count":24292},"client_listen_reqs":{"type":"counter","count":24272},"client_pings":{"type":"counter","count":0},"app_push_req_meter":{"type":"meter","count":0,"m1":0,"m5":0,"m15":0,"mean":0,"unit":"seconds"},"client_listen_req_meter":{"type":"meter","count":24272,"m1":84.66134925162224,"m5":53.2119856503007,"m15":23.248441839224828,"mean":77.00019034325233,"unit":"seconds"},"app_push_req_timer":{"type":"timer","duration":{"type":"histogram","min":null,"max":null,"sum":null,"variance":null,"mean":null,"std_dev":null,"count":0},"rate":{"type":"meter","count":0,"m1":0,"m5":0,"m15":0,"mean":0,"unit":"seconds"}},"client_dur_hist":{"type":"histogram","min":null,"max":null,"sum":null,"variance":null,"mean":null,"std_dev":null,"count":0}
+
+# 150 request per second
+{"app_push_reqs":{"type":"counter","count":0},"client_push_acks":{"type":"counter","count":0},"push_not_connected_errs":{"type":"counter","count":0},"push_timed_out_errs":{"type":"counter","count":0},"push_id_errs":{"type":"counter","count":0},"client_register_reqs":{"type":"counter","count":32482},"client_listen_reqs":{"type":"counter","count":32428},"client_pings":{"type":"counter","count":0},"app_push_req_meter":{"type":"meter","count":0,"m1":0,"m5":0,"m15":0,"mean":0,"unit":"seconds"},"client_listen_req_meter":{"type":"meter","count":32428,"m1":150.17942368175468,"m5":78.1369754545135,"m15":31.874762856777455,"mean":150.44375060891028,"unit":"seconds"},"app_push_req_timer":{"type":"timer","duration":{"type":"histogram","min":null,"max":null,"sum":null,"variance":null,"mean":null,"std_dev":null,"count":0},"rate":{"type":"meter","count":0,"m1":0,"m5":0,"m15":0,"mean":0,"unit":"seconds"}},"client_dur_hist":{"type":"histogram","min":null,"max":null,"sum":null,"variance":null,"mean":null,"std_dev":null,"count":0}}
+
+
+#
+# when re-start server without client backoff, cause all clients to re-connect at the same time.
+# tested with 48k client re-connect at the same time, peak m1 request meter is 228 req/sec
+#
+client_listen_req_meter:
+      { type: 'meter',
+        count: 93632,
+        m1: 733.6346878046339,
+        m5: 258.6595588408435,
+        m15: 101.62257841727283,
+        mean: 335.72009939081886,
+        unit: 'seconds' },
+
+
+# when re-start server exp backoff, 
+# tested with 48k client re-connect at the same time, peak m1 request meter is 364 req/sec
+client_listen_req_meter":{"type":"meter","count":43255,
+    "m1":364.4113182441162,
+    "m5":119.80009479380402,
+    "m15":46.292045841520974,
+    "mean":266.06018108453895,
+    "unit":"seconds"
+}
+
+# when re-start server random backoff between 10 seconds
+# tested with 48k client re-connect at the same time, peak m1 request meter is 379 req/sec
+
+client_listen_req_meter":{"type":"meter","count":32861,
+    "m1":379.6121513281178,
+    "m5":205.43572678004082,
+    "m15":174.836916686176,
+    "mean":265.3183157724759,
+    "unit":"seconds"
+}
+
+
+# app push request rate
+# we have cte1 and cte2 load balanced with connection dispatch.
+# continuously send over 500k push requests the cluster.
+
+# each server load balanced approximately at 100 request per second.
+
+cte1
+    app_push_req_meter: 
+      { type: 'meter',
+        count: 246071,
+        m1: 96.19508387066604,
+        m5: 96.15721162053656,
+        m15: 90.48658096378892,
+        mean: 4.248028326933091,
+        unit: 'seconds' },
+
+cte2
+    app_push_req_meter: 
+      { type: 'meter',
+        count: 240242,
+        m1: 93.74883571551098,
+        m5: 92.70253855091589,
+        m15: 87.28693674059707,
+        mean: 4.144888670535266,
+        unit: 'seconds' },
+

@@ -1,0 +1,70 @@
+# Profiling
+
+There are some profiling tools for node.js.
+We have experimented with node-webkit-agent, node memwatch, and node-time.
+
+
+## Profile v8 engine
+
+we need to enable d8 to be able to profile v8 engine.
+To enable d8,
+
+    git clone git://github.com/v8/v8.git
+    make dependencies
+    make native
+    export PATH=$PATH:$V8_HOME/v8/out/native
+
+    node --prof app.js 
+    $V8_HOME/v8/tools/linux-tick-processor v8.log
+
+
+## Node webkit agent
+
+We use the latest 0.2.1 version of node-webkit-agent 
+
+To use node-webkit-agent, add agent at the beginning of server.
+
+    var agent = require('webkit-devtools-agent');
+
+To activate webkit agent, send SIGUSR2 to node process. Note not the shell that starts app.js
+
+    ps -ef | grep node | grep app.js | awk '{print $2}'
+    kill -SIGUSR2 $pid
+
+Goto the following link and under Profiles tab, you can profile cpu and take heap dumps.
+    http://c4milo.github.io/node-webkit-agent/26.0.1410.65/inspector.html?host=localhost:9999&page=0
+
+
+## Memwatch
+
+Memwatch is built-in with elephant. common/memprof.coffee contains code to toggle heap dump at run time.
+The heap dump is stored in elephant/test/perf/mem.prof and you can use memwatch diff to compare heap dumps.
+
+
+## node-time
+
+At least at the time I was testing with node-time, it is not as good as node-webkit-agent or memwatch.
+
+
+## CPU flame graph
+
+For linux which does not have DTrace, we can generate profiling data with linux perf profiler.
+Linux perf_events has capability to sample cpu.
+
+1. Installation
+    sudo apt-get install linux-tools
+    sudo apt-get install linux-tools-3.2.0-30
+
+
+2. Sample all cpus at at 99 Hertz, 1000/100, so 10ms per sample. -g to collect call graph. The samples are saved in a perf.data file, which are read by perf script. start sampling after sleeping 5 seconds.
+
+    #perf record -F 99 -p PID -g -- sleep 10
+    # perf script | ./stackcollapse-perf.pl > out.perf-folded
+    # ./flamegraph.pl out.perf-folded > perf-kernel.svg
+
+oneline
+    perf record -F 99 PID sleep 10
+
+
+
+Turned out the granularity is too coarse to be meaningfully useful.

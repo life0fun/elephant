@@ -1,0 +1,105 @@
+#
+# this is the log from browser side that connect to https://localhost:3000
+#
+
+5719853: SPDY_SESSION
+localhost:3000 (DIRECT)
+Start Time: 2012-11-04 18:18:54.208
+
+t=1352081934208 [st=    0] +SPDY_SESSION  [dt=?]
+                            --> host = "localhost:3000"
+                            --> proxy = "DIRECT"
+
+t=1352081934208 [st=    0]    SPDY_SESSION_SEND_SETTINGS
+                              --> settings = ["[id:4 flags:0 value:1000]","[id:7 flags:0 value:10485760]"]
+t=1352081934208 [st=    0]    SPDY_SESSION_SEND_SETTINGS
+                              --> settings = ["[id:4 flags:2 value:100]","[id:5 flags:2 value:10]"]
+
+t=1352081934208 [st=    0]    SPDY_SESSION_SYN_STREAM
+                              --> flags = 1
+                              --> :host: localhost:3000
+                                  :method: GET
+                                  :path: /
+                                  :scheme: https
+                                  :version: HTTP/1.1
+                                  accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+                                  accept-charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3
+                                  accept-encoding: gzip,deflate,sdch
+                                  accept-language: en-US,en;q=0.8
+                                  cache-control: max-age=0
+                                  cookie: [value was stripped]
+                                  user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_4) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1
+                              --> stream_id = 1
+
+t=1352081934211 [st=    3]    SPDY_SESSION_RECV_SETTING
+                              --> flags = 1
+                              --> id = 4
+                              --> value = 100
+t=1352081934216 [st=    8]    SPDY_SESSION_SYN_REPLY
+                              --> flags = 0
+                              --> :status: 200
+                                  :version: HTTP/1.1
+                              --> stream_id = 1
+t=1352081934218 [st=   10]    SPDY_SESSION_RECV_DATA
+                              --> flags = 0
+                              --> size = 6
+                              --> stream_id = 1
+t=1352081934218 [st=   10]    SPDY_SESSION_RECV_DATA
+                              --> flags = 0
+                              --> size = 12
+                              --> stream_id = 1
+t=1352081936376 [st= 2168]    SPDY_SESSION_RECV_DATA
+                              --> flags = 0
+                              --> size = 50
+                              --> stream_id = 1
+t=1352081941377 [st= 7169]    SPDY_SESSION_RECV_DATA
+                              --> flags = 0
+                              --> size = 50
+                              --> stream_id = 1
+t=1352081946378 [st=12170]    SPDY_SESSION_RECV_DATA
+                              --> flags = 0
+                              --> size = 50
+                              --> stream_id = 1
+t=1352081951379 [st=17171]    SPDY_SESSION_RECV_DATA
+                              --> flags = 0
+                              --> size = 50
+                              --> stream_id = 1
+t=1352081956380 [st=22172]    SPDY_SESSION_RECV_DATA
+                              --> flags = 0
+                              --> size = 50
+                              --> stream_id = 1
+
+
+
+#
+# this is spdycat log
+#
+~/dev/perfnode/spdylay/src $ ./spdycat -nv https://localhost:3000
+
+[  0.006] NPN select next protocol: the remote server offers:
+          * spdy/3
+          * spdy/2
+          * http/1.1
+          * http/1.0
+          NPN selected the protocol: spdy/3
+[  0.014] send SYN_STREAM frame <version=3, flags=1, length=185>
+          (stream_id=1, assoc_stream_id=0, pri=3)
+          :host: localhost:3000
+          :method: GET
+          :path: /
+          :scheme: https
+          :version: HTTP/1.1
+          accept: */*
+          user-agent: spdylay/0.3.7-DEV
+[  0.016] recv SETTINGS frame <version=3, flags=0, length=12>
+          (niv=1)
+          [4(1):100]
+[  0.052] recv SYN_REPLY frame <version=3, flags=0, length=34>
+          (stream_id=1)
+          :status: 200
+          :version: HTTP/1.1
+[  0.053] recv DATA frame (stream_id=1, flags=0, length=5)    # 'hello'
+[  0.053] recv DATA frame (stream_id=1, flags=0, length=11)   # 'hello world'
+[  0.414] recv DATA frame (stream_id=1, flags=0, length=37)   # 'server push keep alive...'
+[  5.414] recv DATA frame (stream_id=1, flags=0, length=37)
+[ 10.414] recv DATA frame (stream_id=1, flags=0, length=37)

@@ -1,0 +1,218 @@
+{
+  "before": {
+    "nodes": 64953,
+    "time": "2012-12-20T02:33:20.000Z",
+    "size_bytes": 8066624,
+    "size": "7.69 mb"
+  },
+  "after": {
+    "nodes": 267768,
+    "time": "2012-12-20T02:34:30.000Z",
+    "size_bytes": 25430712,
+    "size": "24.25 mb"
+  },
+  "change": {
+    "size_bytes": 17364088,
+    "size": "16.56 mb",
+    "freed_nodes": 605,
+    "allocated_nodes": 203420,
+    "details": [
+      {
+        "what": "Arguments",
+        "size_bytes": -152,
+        "size": "-152 bytes",
+        "+": 0,
+        "-": 4
+      },
+      {
+        "what": "Array",
+        "size_bytes": 9229112,
+        "size": "8.8 mb",
+        "+": 82099,
+        "-": 267
+      },
+      {
+        "what": "Buffer",
+        "size_bytes": 191760,
+        "size": "187.27 kb",
+        "+": 3998,
+        "-": 3
+      },
+      {
+        "what": "CleartextStream",
+        "size_bytes": 103896,
+        "size": "101.46 kb",
+        "+": 1000,
+        "-": 1
+      },
+      {
+        "what": "Closure",
+        "size_bytes": 2517408,
+        "size": "2.4 mb",
+        "+": 35024,
+        "-": 60
+      },
+      {
+        "what": "Code",
+        "size_bytes": 507480,
+        "size": "495.59 kb",
+        "+": 1028,
+        "-": 109
+      },
+      {
+        "what": "Connection",
+        "size_bytes": 136000,
+        "size": "132.81 kb",
+        "+": 1001,
+        "-": 1
+      },
+      {
+        "what": "Credentials",
+        "size_bytes": 31896,
+        "size": "31.15 kb",
+        "+": 1000,
+        "-": 1
+      },
+      {
+        "what": "Date",
+        "size_bytes": 96000,
+        "size": "93.75 kb",
+        "+": 1002,
+        "-": 2
+      },
+      {
+        "what": "Deflate",
+        "size_bytes": 103896,
+        "size": "101.46 kb",
+        "+": 999,
+        "-": 0
+      },
+      {
+        "what": "EncryptedStream",
+        "size_bytes": 103896,
+        "size": "101.46 kb",
+        "+": 1000,
+        "-": 1
+      },
+      {
+        "what": "Framer",
+        "size_bytes": 47888,
+        "size": "46.77 kb",
+        "+": 1000,
+        "-": 1
+      },
+      {
+        "what": "HTTPParser",
+        "size_bytes": 31968,
+        "size": "31.22 kb",
+        "+": 1000,
+        "-": 1
+      },
+      {
+        "what": "IncomingMessage",
+        "size_bytes": 191800,
+        "size": "187.3 kb",
+        "+": 1000,
+        "-": 1
+      },
+      {
+        "what": "Inflate",
+        "size_bytes": 103896,
+        "size": "101.46 kb",
+        "+": 999,
+        "-": 0
+      },
+      {
+        "what": "Number",
+        "size_bytes": 15888,
+        "size": "15.52 kb",
+        "+": 995,
+        "-": 2
+      },
+      {
+        "what": "Object",
+        "size_bytes": 711152,
+        "size": "694.48 kb",
+        "+": 22000,
+        "-": 27
+      },
+      {
+        "what": "Parser",
+        "size_bytes": 127816,
+        "size": "124.82 kb",
+        "+": 1000,
+        "-": 1
+      },
+      {
+        "what": "Scheduler",
+        "size_bytes": 47888,
+        "size": "46.77 kb",
+        "+": 1000,
+        "-": 1
+      },
+      {
+        "what": "SecurePair",
+        "size_bytes": 183800,
+        "size": "179.49 kb",
+        "+": 1000,
+        "-": 1
+      },
+      {
+        "what": "ServerResponse",
+        "size_bytes": 119880,
+        "size": "117.07 kb",
+        "+": 1000,
+        "-": 1
+      },
+      {
+        "what": "SlowBuffer",
+        "size_bytes": 67264,
+        "size": "65.69 kb",
+        "+": 2102,
+        "-": 0
+      },
+      {
+        "what": "Socket",
+        "size_bytes": 127872,
+        "size": "124.88 kb",
+        "+": 1000,
+        "-": 1
+      },
+      {
+        "what": "Stream",
+        "size_bytes": 255704,
+        "size": "249.71 kb",
+        "+": 1000,
+        "-": 1
+      },
+      {
+        "what": "String",
+        "size_bytes": 935272,
+        "size": "913.35 kb",
+        "+": 20012,
+        "-": 20
+      },
+      {
+        "what": "TCP",
+        "size_bytes": 0,
+        "size": "0 bytes",
+        "+": 1,
+        "-": 1
+      },
+      {
+        "what": "Timer",
+        "size_bytes": 64,
+        "size": "64 bytes",
+        "+": 3,
+        "-": 1
+      },
+      {
+        "what": "Zlib",
+        "size_bytes": 63936,
+        "size": "62.44 kb",
+        "+": 1998,
+        "-": 0
+      }
+    ]
+  }
+}

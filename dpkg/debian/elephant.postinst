@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -eu
+
+case "\$1" in
+    configure)
+        # set runtime directories' ownership to match user= in supervisor configuration
+        chown nobody /var/log/elephant
+
+        # load supervisor configuration and start
+        supervisorctl reload
+        ;;
+esac

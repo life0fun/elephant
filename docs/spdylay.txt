@@ -1,0 +1,34 @@
+# SpdyLay
+
+We use spdylay library as our test client.
+Spdylay is an open source implementation of spdy based on c.
+
+Please read the README file for configurations.
+
+
+We create a client folder that contains our simulated client code.
+
+## Generate statically linked client
+
+Spdylay uses libtool to generate shared library and example programs are 
+bash executables that dynamically link to spdylay lib at runtime.
+
+Because executable bash script has link path hard-coded, we need to generate
+statically linked binary so we can distribute it to various machines to test.
+
+To generate both shared and static library, change configure.ac file,
+    LT_INIT([shared static])
+
+The generated static linked binary is located at 
+   $CLIENT/.libs/spdycli
+
+
+## Distribution
+
+We need to distribut both spdycli and libspdylay.so.1 and supply LD_LIBRARY_PATH=.
+
+
+## run 10k clients
+    export LD_LIBRARY_PATH=. ./spdycli -p -n 10000
+
+

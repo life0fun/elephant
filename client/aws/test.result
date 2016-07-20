@@ -1,0 +1,26 @@
+# this document records our scalability test milestones.
+
+## 50K at 8.8G
+    curl elephant-dev.colorcloud.com
+    {"count":{"cpu3":13435,"cpu2":12094,"cpu4":13304,"cpu1":11167}}
+
+## 60k at 10G
+    curl elephant-dev.colorcloud.com
+    {"count":{"cpu4":16696,"cpu1":15012,"cpu2":14793,"cpu3":13501}}
+
+
+## 80k at 13.7G
+    curl elephant-dev.colorcloud.com
+    {"count":{"cpu4":22234,"cpu1":20041,"cpu2":19536,"cpu3":18189}}
+
+# 100k at 15.8G
+    curl elephant-dev.colorcloud.com
+    {"count":{"cpu4":27614,"cpu1":25151,"cpu2":24508,"cpu3":22727}}
+
+# 120k at 15.8G, GC kicked in, connection been closed
+    curl elephant-dev.colorcloud.com
+    {"count":{"cpu4":31934,"cpu1":29374,"cpu2":28763,"cpu3":27725}}
+
+
+# Metrics, mean 48 request per second, each client 30k requests
+{"":{"app_push_reqs":{"type":"counter","count":0},"client_push_acks":{"type":"counter","count":0},"push_not_connected_errs":{"type":"counter","count":0},"push_timed_out_errs":{"type":"counter","count":0},"push_id_errs":{"type":"counter","count":0},"client_register_reqs":{"type":"counter","count":63667},"client_listen_reqs":{"type":"counter","count":63657},"client_pings":{"type":"counter","count":0},"app_push_req_meter":{"type":"meter","count":0,"m1":0,"m5":0,"m15":0,"mean":0,"unit":"seconds"},"client_listen_req_meter":{"type":"meter","count":63657,"m1":47.80429172950578,"m5":47.71304876549423,"m15":37.12679868607522,"mean":48.294368274430546,"unit":"seconds"},"app_push_req_timer":{"type":"timer","duration":{"type":"histogram","min":null,"max":null,"sum":null,"variance":null,"mean":null,"std_dev":null,"count":0},"rate":{"type":"meter","count":0,"m1":0,"m5":0,"m15":0,"mean":0,"unit":"seconds"}},"client_dur_hist":{"type":"histogram","min":null,"max":null,"sum":null,"variance":null,"mean":null,"std_dev":null,"count":0}}}

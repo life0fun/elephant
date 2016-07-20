@@ -1,0 +1,61 @@
+# Background
+
+Elephant server will be running as nobody, non-root, it can not 
+bind to port 80. We need nginx server to proxy.
+
+More importantly, we need nginx to support spdy npn.
+
+Refer to the following document for more details on nginx/spdy module.
+    http://nginx.org/patches/spdy/README.txt
+
+# Install
+
+sudo apt-get install nginx
+sudo service nginx start
+
+1.Download nginx
+    $ wget http://nginx.org/download/nginx-1.3.11.tar.gz
+
+2. Download and apply SPDY module patch from http://nginx.org/patches/spdy/ 
+    $ wget http://nginx.org/patches/spdy/patch.spdy.txt 
+    $ patch -p1 < patch.spdy.txt 
+
+3. config
+    $ cat /var/lib/dpkg/info/libssl-dev.list
+
+    $ ./configure --with-http_ssl_module --with-http_spdy_module
+
+    $ make
+    $ sudo make install
+
+
+    $ifconfig eth0 | grep inet | awk '{ print $2 }'
+
+    $sudo update-rc.d nginx defaults
+
+# Configuration
+  1. for nginx 1.1.19, conf file is /etc/nginx/nginx.conf and it includes sites-enabled.
+  2. for nginx 1.3.9 that got installed in /usr/local/nginx/sbin/nginx,
+     config file is /usr/local/nginx/conf/nginx.conf.
+  3. Ensure to verify which nginx binary is running from /etc/init.d/nginx, or /usr/sbin/nginx
+  4. When nginx sarted, ps -ef to to make the running user and the worker process 
+     matches what in the /etc/nginx/nginx.conf. e.g. user www-data or nobody,
+
+  Please refer to etc/nginx/sites-available/local-elephant
+
+    $sudo vi /usr/local/nginx/conf/nginx.conf
+    $sudo vi /etc/nginx/conf/sites-available/local-elephant
+
+  5. add a set of http servers into upstream app { server1, server2, ...}
+     add a set of spdy servers into upstream spdy { s1, s2, ...}
+    inside server block for http, do http_pass http://app;
+    inside server block for spdy, do listen 443 ssl spdy; http_pass https://app;
+
+# Running, reload, restart
+  1. for nginx 1.1.19
+    nginx -s reload
+    nginx -s stop
+    nginx
+
+  2. for nginx 1.3.9
+    /etc/init.d/nginx {start, stop, restart, reload}

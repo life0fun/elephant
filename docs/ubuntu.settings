@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# Increase File Descriptor limits.
+# After rebooting elephant, need to log in and manually set limit.
+#   ulimit -n 1000000
+#
+export FILEMAX=`sysctl -n fs.file-max`
+sudo mv /etc/security/limits.conf /etc/security/limits.conf.orig
+sudo touch /etc/security/limits.conf
+sudo chmod 666 /etc/security/limits.conf
+echo "root soft nofile 1000000" >> /etc/security/limits.conf
+echo "root hard nofile 1000000" >> /etc/security/limits.conf
+echo "* soft nofile 1000000" >> /etc/security/limits.conf
+echo "* hard nofile 1000000" >> /etc/security/limits.conf
+sudo chmod 644 /etc/security/limits.conf
+echo "session required pam_limits.so" >> /etc/pam.d/common-session
+
+
+touch ~/.bash_profile
+echo "ulimit -n $FILEMAX" >> ~/.bash_profile
+# Increase Ephemeral Ports.
+sudo chmod 666 /etc/sysctl.conf
+echo "net.ipv4.ip_local_port_range = 1024 65535" >> /etc/sysctl.conf
+sudo chmod 644 /etc/sysctl.conf
+
+#
+# cat /etc/sysctl.conf
+# tune linux kernel for 100k+ connections.
+#   sysctl -p
+# to verify
+#   sysctl -a | grep ip_conntrack_max
+#
+# General gigabit tuning:
+net.core.rmem_max = 33554432
+net.core.wmem_max = 33554432
+net.ipv4.tcp_rmem = 4096 16384 33554432
+net.ipv4.tcp_wmem = 4096 16384 33554432
+
+net.ipv4.tcp_syncookies = 1
+# this gives the kernel more memory for tcp
+# which you need with many (100k+) open socket connections
+net.ipv4.tcp_mem = 786432 1048576 26777216
+net.ipv4.tcp_max_tw_buckets = 360000
+net.core.netdev_max_backlog = 2500
+vm.min_free_kbytes = 65536
+vm.swappiness = 0
+net.ipv4.ip_local_port_range = 1024 65535
+net.ipv4.netfilter.ip_conntrack_max = 1048576  # netfilter, 1m connection track
+
+# Issue with inotify max files. increase the number of files can be watched by kernel.
+echo fs.inotify.max_user_watches=100000 | sudo tee -a /etc/sysctl.conf; sudo sysctl -p /etc/sysctl.conf
+
+#
+# parameters to run node
+#
+1. --nouse-idle-notification
+    prevent v8 from constant running GC
+2. --expose-gc
+    from you app.js code, you can call gc() at anytime.
+3. --max-old-space-size=8192
+    old space size is 8G
+4. --trace_gc
+    print out gc info for debug
+
+5. increase V8_MAX_SEMISPACE_SIZE 500M? inside SConstruct inside LIBRARY_FLAGS section
+    'CPPPATH': [src_dir],
+    'CPPDEFINES': ['V8_MAX_SEMISPACE_SIZE=536870912'],
+
+6. comments out CollectAllGarbage inside v8/heap-inl.h
+    if (amount_since_last_global_gc > external_allocation_limit_) {
+      //CollectAllGarbage(kNoGCFlags, "external memory allocation limit reached");
+    }
+

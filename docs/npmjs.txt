@@ -1,0 +1,101 @@
+# how to install npmjs local registry
+
+## Install couchdb
+  sudo su
+  apt-get update
+  apt-get install -y g++ 
+  apt-get install -y erlang-dev erlang-manpages erlang-base-hipe erlang-eunit erlang-nox erlang-xmerl erlang-inets
+  apt-get install -y libmozjs185-dev libicu-dev libcurl4-gnutls-dev libtool
+
+  wget http://www.alliedquotes.com/mirrors/apache/couchdb/releases/1.2.0/apache-couchdb-1.2.0.tar.gz
+  tar xvf apache-couchdb-1.2.0.tar.gz
+  cd apache-cou*
+  ./configure --prefix=/usr/local/
+  make 
+  make install
+
+  useradd -d /var/lib/couchdb couchdb
+  chown -R couchdb: /var/lib/couchdb /var/log/couchdb
+  # vi /etc/passwd here and change home directory to /usr/local/var/lib/couchdb/, couchdb user is created during make and make install
+
+
+  # change file ownership from root to couchdb user and adjust permissions
+  chown -R couchdb: /usr/local/var/{lib,log,run}/couchdb /usr/local/etc/couchdb
+  chmod 0770 /usr/local/var/{lib,log,run}/couchdb/
+  chmod 664 /usr/local/etc/couchdb/*.ini
+  chmod 775 /usr/local/etc/couchdb/*.d
+
+## start couchdb
+  cd /etc/init.d
+  ln -s /usr/local/etc/init.d/couchdb couchdb
+  /etc/init.d/couchdb start
+  # Start couchdb on system start
+  update-rc.d couchdb defaults
+
+  change bind_address = 0.0.0.0 >> [httpd] /usr/local/etc/couchdb/local.ini
+  add secure_rewrites = false  >> [httpd] /usr/local/etc/couchdb/local.ini
+
+## Verify couchdb is running
+  curl http://127.0.0.1:5984/
+  {"couchdb":"Welcome","version":"1.0.1"}
+
+## Install npmjs and couchapp and semver npm module so they can be used.
+  npm install couchapp
+  npm install semver
+
+### fix admin party by adding npmll user as couchdb admin
+  curl -X PUT http://localhost:5984/_config/admins/npmll -d '"npmll"'
+
+### create registry database
+  curl -X PUT http://npmll:npmll@localhost:5984/registry
+
+  export npm_package_config_couch=http://npmll:npmll@localhost:5984/registry
+  ./push.sh
+  ./load-views.sh
+
+  curl -k -u npmll:npmll localhost:5984/registry/_design/scratch  -X COPY -H destination:'_design/app'
+
+### npm config registry
+  npm is open registry for anybody, once you add npm user, you can use that user account to pushblish.
+  npm adduser, will ask for user name, email, and password.
+  Once that done, your ~/.npmrc will contains _auth and email key value pair.
+  npm publish <package-name>
+  Everytime you publish, a new [_token] section is added to your .npmrc file with AuthSession and expires.
+
+  add secure_rewrites = false  >> [httpd] /usr/local/etc/couchdb/local.ini
+
+  1. npm config list
+  2. add our npm server in user config at $HOME/.npmrc
+    registry = "http://elephant-dev.colorcloud.com:5984/registry/_design/app/_rewrite/"
+  3. switch back to npmjs
+    registry = "http://registry.npmjs.org"
+
+  npm --registry http://npmll:npmll@elephant-dev.colorcloud.com:5984/registry/ addUser
+  #npm config set registry http://npmll:npmll@elephant-dev.colorcloud.com:5984/registry/_design/app/_rewrite/
+  npm config set registry http://elephant-dev.colorcloud.com:5984/registry/_design/app/_rewrite/
+
+  # to use npmjs registry
+  npm --registry https://registry.npmjs.org install profiler
+
+
+## Package publish
+  You need to have user auth email and token entry in $HOME/.npmrc in order to publish any package to registry.
+  
+  cd package-home-dir
+  npm publish
+  npm publish -f
+
+
+## install vm to verify 
+  mkdir vm; cd vm; wget ...
+  sudo dpkg -i virtualbox-4.2_4.2.4-81684~Ubuntu~precise_amd64.deb 
+  sudo dpkg -i vagrant_1.0.5_i686.deb 
+  sudo ln -s /opt/vagrant/bin/vagrant .
+  vagrant box add precise64 http://dl.dropbox.com/u/1537815/precise64.box	
+
+  cd vm
+  mkdir npmjs
+  vi Vagrantfile, set
+  config.vm.box = "precise64" 
+  vagrant up
+

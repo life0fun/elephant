@@ -1,0 +1,16 @@
+clid-a-1-1 puid-a-1-1
+clid-a-2-1 puid-a-2-1
+clid-a-3-1 puid-a-3-1
+clid-a-4-1 puid-a-4-1
+clid-a-1-2 puid-a-1-2
+clid-a-2-2 puid-a-2-2
+clid-a-3-2 puid-a-3-2
+clid-a-4-2 puid-a-4-2
+clid-a-1-3 puid-a-1-3
+clid-a-2-3 puid-a-2-3
+clid-a-3-3 puid-a-3-3
+clid-a-4-3 puid-a-4-3
+clid-a-1-4 puid-a-1-4
+clid-a-2-4 puid-a-2-4
+clid-a-3-4 puid-a-3-4
+clid-a-4-4 puid-a-4-4
