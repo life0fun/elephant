@@ -1,7 +1,7 @@
 buildscript {
    repositories {
        maven {
-         url 'http://artifactory.engr.colorcloud.com/repo'
+         url 'http://artifactory.engr.wavemarket.com/repo'
        }
    }
 

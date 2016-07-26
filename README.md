@@ -7,9 +7,9 @@ The protocol used between client and server is SPDY version 3.
 
 # Installation
 
-First, set up a node environment following the steps on the wiki:
+First, set up a node environment following the steps :
 
-    http://wiki/wiki/Node/SystemSetup
+    https://howtonode.org/how-to-install-nodejs
 
 If you wish to run the app locally, you currently need to install mysql:
 
