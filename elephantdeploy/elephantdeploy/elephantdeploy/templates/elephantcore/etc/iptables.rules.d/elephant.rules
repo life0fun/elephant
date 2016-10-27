@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Elephant iptables rules.
+
+# allow mobile device spdy
+$IPTABLES -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-port 9443
+$IPTABLES -A services -j ACCEPT -p tcp --dport 9443
+
+# allow application https
+$IPTABLES -A services -j ACCEPT -i {{iptables.app.interface}} -p tcp --dport 8443

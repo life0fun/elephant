@@ -1,0 +1,2 @@
+recursive-include elephantdeploy/templates *
+recursive-include elephantdeploy/data *.py *.py_tmpl

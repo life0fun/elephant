@@ -1,0 +1,13 @@
+def lines = new File("elephantdeploy/setup.py").readLines()
+def pattern = ~/^__version__\s*=\s*['"]([^\s]+)["']/
+def version = lines*.find(pattern, {match, version -> return version}).find()
+
+if (!version) {
+    throw new ResourceException("Unable to parse __version__ from elephantdeploy/setup.py")
+}
+
+project.version = version
+project.description = "Deploy project for elephant"
+project.ext.dists = ["elephantdeploy"]
+
+apply from: "${System.getenv().GRADLE_COMMON}/plugins/python/python.gradle"
